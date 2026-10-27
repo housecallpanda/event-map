@@ -1,0 +1,13 @@
+id,name,city,date,lat,lng,address,description,active,type,registration_url
+phx,Pros Summit Phoenix,"Phoenix, AZ",2026-03-12,33.4484,-112.074,,"A day of training, networking, and product walk-throughs with local Pros.",yes,gallery,
+atl,Champion the Trades Atlanta,"Atlanta, GA",2026-04-22,33.749,-84.388,,Placeholder event description.,yes,gallery,
+dal,Texas Pros Meetup,"Dallas, TX",2026-05-14,32.7767,-96.797,,Placeholder event description.,yes,gallery,
+den,Mountain West Pro Day,"Denver, CO",2026-06-09,39.7392,-104.9903,,Placeholder event description.,yes,gallery,
+chi,Midwest Trades Roundtable,"Chicago, IL",2026-07-18,41.8781,-87.6298,,Placeholder event description.,yes,gallery,
+nyc,Northeast Pros Mixer,"New York, NY",2026-08-06,40.7128,-74.006,,Placeholder event description.,yes,gallery,
+sea,Pacific Northwest Pro Day,"Seattle, WA",2026-09-03,47.6062,-122.3321,,Placeholder event description.,yes,gallery,
+mia,Florida Pros Summit,"Miami, FL",2026-09-24,25.7617,-80.1918,,Placeholder event description.,yes,gallery,
+lax,LA Pros Photoshoot Day,"Los Angeles, CA",2026-02-10,34.0522,-118.2437,,Placeholder event description.,yes,gallery,
+nsh,Nashville Pros Meetup,"Nashville, TN",2026-11-12,36.1627,-86.7816,,"Join local Pros for a day of training, networking, and hands-on sessions. Placeholder text.",yes,upcoming,https://www.housecallpro.com/
+bos,Boston Trades Day,"Boston, MA",2026-12-03,42.3601,-71.0589,,"Placeholder text. No registration link entered, so no Register button shows.",yes,upcoming,
+lv,Mountain West Summit,"Las Vegas, NV",2027-01-21,36.1699,-115.1398,,"Hover-only pin, no details or link.",yes,info,
