@@ -316,6 +316,7 @@
   function nnOf(p){var nn=1e9;act.forEach(function(q){if(q!==p){var d=Math.hypot(q.x-p.x,q.y-p.y);if(d<nn)nn=d}});return nn}
   var needRestore=false;
   list.forEach(function(p){var want=(small?24:20)/k,hit=p.fixed?15/k:Math.max(p.rv,Math.min(want,nnOf(p)/2));
+   if((p.clu||off[p.kind])&&p.g.classList.contains('drop')){p.g.classList.remove('drop');p.g.style.animationDelay=''}
    p.g.classList.toggle('clu',!!p.clu&&!p.fan);p.g.classList.toggle('fan',!!p.fan);if(p.fan){if(p.g.parentNode!==fanlayer)fanlayer.appendChild(p.g)}else if(p.g.parentNode===fanlayer)needRestore=true;
    p.dot.setAttribute('cx',p.x);p.dot.setAttribute('cy',p.y);p.dot.setAttribute('r',p.rv);p.hit.setAttribute('cx',p.x);p.hit.setAttribute('cy',p.y);p.hit.setAttribute('r',hit);
    p.ring.setAttribute('cx',p.x);p.ring.setAttribute('cy',p.y);p.ring.setAttribute('r',p.rv*1.9);p.g.style.setProperty('--rw',2.2/k);
