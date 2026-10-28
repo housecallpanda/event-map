@@ -40,6 +40,9 @@
 .hcp-map .pin.cluster.hit .cdot{stroke:var(--gold)}
 .hcp-map .pin.cluster.open .cdot{fill:var(--slate);stroke:var(--carbon)}
 .hcp-map .pin.cluster.open text{fill:var(--carbon)}
+.hcp-map .pin.info.fan .dot{fill:#fff;opacity:1;stroke:var(--carbon);stroke-opacity:1}
+.hcp-map .pin.info.fan:hover .dot,.hcp-map .pin.info.fan:focus-visible .dot{opacity:1;transform:scale(1.2)}
+.hcp-map .pin.info.fan:focus-visible .dot{stroke:var(--gold)}
 .hcp-map .leaders line{stroke:var(--slate);stroke-opacity:.55;stroke-linecap:round}
 .hcp-map.zoomed svg.map{overflow:hidden}
 .hcp-map.zoomed.pannable svg.map{cursor:grab}
@@ -239,9 +242,10 @@
  function showTip(pin){var ev=pin.ev;tip.innerHTML='';var b=document.createElement('span');b.textContent=ev.name;var sm=document.createElement('small');sm.textContent=ev.city+(ev.date?' · '+fmt(ev.date):'');tip.appendChild(b);tip.appendChild(sm);placeTip(pin);tip.classList.add('on');tipPin=pin;pin.at=Date.now()}
  var tipPin=null;function hideTip(){tip.classList.remove('on');tipPin=null}
  document.addEventListener('pointerdown',function(e){if(tipPin&&!(e.target.closest&&e.target.closest('#hcpMap .pin')))hideTip()});
- var Z={x:0,y:0,w:975,h:610},MODE=D.cluster==='fan'?'fan':'zoom',ZMAX=10,clus=[],cpool=[],fanKey=null,animId=0,panS=null,
+ var Z={x:0,y:0,w:975,h:610},fanlayer=null,MODE=D.cluster==='fan'?'fan':'zoom',ZMAX=10,clus=[],cpool=[],fanKey=null,animId=0,panS=null,
   reduced=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches),coarse=!!(window.matchMedia&&matchMedia('(pointer:coarse)').matches),
   leaders=root.querySelector('.leaders'),cgrp=root.querySelector('.clusters'),zreset=root.querySelector('.zreset'),zlive=root.querySelector('.zlive');
+ fanlayer=mk('g','fanlayer');svg.appendChild(fanlayer);fanlayer.appendChild(leaders);
  function applyView(){svg.setAttribute('viewBox',Z.x+' '+Z.y+' '+Z.w+' '+Z.h);var z=Z.w<974;root.classList.toggle('zoomed',z);root.classList.toggle('pannable',z&&MODE==='zoom');zreset.hidden=!(z||fanKey)}
  function setView(t,cb){cancelAnimationFrame(animId);hideTip();
   t.w=Math.max(975/ZMAX,Math.min(975,t.w));t.h=t.w*610/975;t.x=Math.max(0,Math.min(975-t.w,t.x));t.y=Math.max(0,Math.min(610-t.h,t.y));
@@ -294,10 +298,6 @@
   if(fanKey&&!clus.some(function(c){return c.open}))fanKey=null;
   /* fan-out: place the open cluster's members on rings around it */
   var fixed=[];
-  clus.forEach(function(c){if(!c.open)return;c.rv=14/k;var ms=c.members.slice().sort(function(a,b){return a.ev.name.localeCompare(b.ev.name)}),idx=0,r=40,ring=0;
-   while(idx<ms.length){var cap=Math.max(6,Math.floor(2*Math.PI*r/34)),cnt=Math.min(cap,ms.length-idx);
-    for(j=0;j<cnt;j++){var a=-Math.PI/2+2*Math.PI*j/cnt+ring*.45,p=ms[idx+j];p.x=Math.max(10/k,Math.min(975-10/k,c.x0+Math.cos(a)*r/k));p.y=Math.max(10/k,Math.min(610-10/k,c.y0+Math.sin(a)*r/k));p.rv=9/k;p.fan=true;p.fixed=true;fixed.push(p)}
-    idx+=cnt;r+=36;ring++}});
   var act=list.filter(function(p){return !off[p.kind]&&!p.clu}).concat(clus.filter(function(c){return !c.open}));n=act.length;
   for(it=0;it<110;it++){var moved=false;
    for(i=0;i<n;i++)for(j=i+1;j<n;j++){var a=act[i],b=act[j],dx=b.x-a.x,dy=b.y-a.y,d=Math.sqrt(dx*dx+dy*dy),min=a.rv+b.rv+pad;
@@ -305,13 +305,23 @@
    if(it<70)act.forEach(function(p){p.x+=(p.x0-p.x)*0.02;p.y+=(p.y0-p.y)*0.02});
    act.forEach(function(p){p.x=Math.max(p.rv,Math.min(975-p.rv,p.x));p.y=Math.max(p.rv,Math.min(610-p.rv,p.y))});
    if(!moved&&it>=70)break}
+  clus.forEach(function(c){if(!c.open)return;c.rv=14/k;var ms=c.members.slice().sort(function(a,b){return a.ev.name.localeCompare(b.ev.name)}),idx=0,r=40,ring=0,placed=[],others=act.concat(clus.filter(function(q){return q.open&&q!==c}));
+   while(idx<ms.length){var cap=Math.max(6,Math.floor(2*Math.PI*r/34)),cnt=Math.min(cap,ms.length-idx),best=null,bp=1e18,sI,jj;
+    for(sI=0;sI<16;sI++){var rot=ring*.45+(2*Math.PI/cnt)*sI/16,pts=[],pen=0;
+     for(jj=0;jj<cnt;jj++){var a=-Math.PI/2+2*Math.PI*jj/cnt+rot,px=Math.max(10/k,Math.min(975-10/k,c.x0+Math.cos(a)*r/k)),py=Math.max(10/k,Math.min(610-10/k,c.y0+Math.sin(a)*r/k));pts.push([px,py]);
+      others.concat(placed).forEach(function(q){var lim=(q.rv||0)+14/k,d=Math.hypot(q.x-px,q.y-py);if(d<lim)pen+=(lim-d)*(lim-d)})}
+     if(pen<bp){bp=pen;best=pts}}
+    for(jj=0;jj<cnt;jj++){var q=ms[idx+jj];q.x=best[jj][0];q.y=best[jj][1];q.rv=9/k;q.fan=true;q.fixed=true;fixed.push(q);placed.push(q)}
+    idx+=cnt;r+=36;ring++}});
   function nnOf(p){var nn=1e9;act.forEach(function(q){if(q!==p){var d=Math.hypot(q.x-p.x,q.y-p.y);if(d<nn)nn=d}});return nn}
+  var needRestore=false;
   list.forEach(function(p){var want=(small?24:20)/k,hit=p.fixed?15/k:Math.max(p.rv,Math.min(want,nnOf(p)/2));
-   p.g.classList.toggle('clu',!!p.clu&&!p.fan);
+   p.g.classList.toggle('clu',!!p.clu&&!p.fan);p.g.classList.toggle('fan',!!p.fan);if(p.fan){if(p.g.parentNode!==fanlayer)fanlayer.appendChild(p.g)}else if(p.g.parentNode===fanlayer)needRestore=true;
    p.dot.setAttribute('cx',p.x);p.dot.setAttribute('cy',p.y);p.dot.setAttribute('r',p.rv);p.hit.setAttribute('cx',p.x);p.hit.setAttribute('cy',p.y);p.hit.setAttribute('r',hit);
    p.ring.setAttribute('cx',p.x);p.ring.setAttribute('cy',p.y);p.ring.setAttribute('r',p.rv*1.9);p.g.style.setProperty('--rw',2.2/k);
    if(p.halo){p.halo.setAttribute('cx',p.x);p.halo.setAttribute('cy',p.y);p.halo.setAttribute('r',p.rv*1.15)}
    p.g.style.setProperty('--sw',p.sw)});
+  if(needRestore)restoreOrder();
   /* cluster pins */
   clus.forEach(function(c,ci){var o=cEl(ci),want=22/k,hit=c.open?Math.max(c.rv,22/k):Math.max(c.rv,Math.min(want,nnOf(c)/2));c.g=o.g;o.g._c=c;o.g.classList.remove('gone');o.g.classList.toggle('open',c.open);
    [o.dot,o.hit,o.ring,o.ring0].forEach(function(e){e.setAttribute('cx',c.x);e.setAttribute('cy',c.y)});
@@ -321,7 +331,7 @@
   for(i=clus.length;i<cpool.length;i++){cpool[i].g.classList.add('gone');cpool[i].g._c=null}
   /* leader lines */
   while(leaders.firstChild)leaders.removeChild(leaders.firstChild);
-  fixed.forEach(function(p){var c=p.clu,l=mk('line');l.setAttribute('x1',c.x);l.setAttribute('y1',c.y);l.setAttribute('x2',p.x);l.setAttribute('y2',p.y);l.setAttribute('stroke-width',1.4/k);leaders.appendChild(l)});
+  fixed.forEach(function(p){var c=p.clu,l=mk('line'),dd=Math.hypot(p.x-c.x,p.y-c.y)||1,e0=c.rv+2/k;l.setAttribute('x1',c.x+(p.x-c.x)/dd*e0);l.setAttribute('y1',c.y+(p.y-c.y)/dd*e0);l.setAttribute('x2',p.x);l.setAttribute('y2',p.y);l.setAttribute('stroke-width',1.4/k);leaders.appendChild(l)});
   if(tipPin&&(tipPin.kind==='cluster'||(tipPin.clu&&!tipPin.fan)))hideTip();
   csearch();
   if(tipPin)placeTip(tipPin)}
