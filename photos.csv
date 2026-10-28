@@ -1,47 +1,70 @@
-event_id,photo,caption,order
-phx,photos/phx-1.svg,Pros Summit Phoenix - photo 1,1
-phx,photos/phx-2.svg,Pros Summit Phoenix - photo 2,2
-phx,photos/phx-3.svg,Pros Summit Phoenix - photo 3,3
-phx,photos/phx-4.svg,Pros Summit Phoenix - photo 4,4
-phx,photos/phx-5.svg,Pros Summit Phoenix - photo 5,5
-phx,photos/phx-6.svg,Pros Summit Phoenix - photo 6,6
-atl,photos/atl-1.svg,Champion the Trades Atlanta - photo 1,1
-atl,photos/atl-2.svg,Champion the Trades Atlanta - photo 2,2
-atl,photos/atl-3.svg,Champion the Trades Atlanta - photo 3,3
-atl,photos/atl-4.svg,Champion the Trades Atlanta - photo 4,4
-atl,photos/atl-5.svg,Champion the Trades Atlanta - photo 5,5
-dal,photos/dal-1.svg,Texas Pros Meetup - photo 1,1
-dal,photos/dal-2.svg,Texas Pros Meetup - photo 2,2
-dal,photos/dal-3.svg,Texas Pros Meetup - photo 3,3
-dal,photos/dal-4.svg,Texas Pros Meetup - photo 4,4
-den,photos/den-1.svg,Mountain West Pro Day - photo 1,1
-den,photos/den-2.svg,Mountain West Pro Day - photo 2,2
-den,photos/den-3.svg,Mountain West Pro Day - photo 3,3
-den,photos/den-4.svg,Mountain West Pro Day - photo 4,4
-den,photos/den-5.svg,Mountain West Pro Day - photo 5,5
-chi,photos/chi-1.svg,Midwest Trades Roundtable - photo 1,1
-chi,photos/chi-2.svg,Midwest Trades Roundtable - photo 2,2
-chi,photos/chi-3.svg,Midwest Trades Roundtable - photo 3,3
-chi,photos/chi-4.svg,Midwest Trades Roundtable - photo 4,4
-chi,photos/chi-5.svg,Midwest Trades Roundtable - photo 5,5
-chi,photos/chi-6.svg,Midwest Trades Roundtable - photo 6,6
-nyc,photos/nyc-1.svg,Northeast Pros Mixer - photo 1,1
-nyc,photos/nyc-2.svg,Northeast Pros Mixer - photo 2,2
-nyc,photos/nyc-3.svg,Northeast Pros Mixer - photo 3,3
-nyc,photos/nyc-4.svg,Northeast Pros Mixer - photo 4,4
-nyc,photos/nyc-5.svg,Northeast Pros Mixer - photo 5,5
-sea,photos/sea-1.svg,Pacific Northwest Pro Day - photo 1,1
-sea,photos/sea-2.svg,Pacific Northwest Pro Day - photo 2,2
-sea,photos/sea-3.svg,Pacific Northwest Pro Day - photo 3,3
-sea,photos/sea-4.svg,Pacific Northwest Pro Day - photo 4,4
-mia,photos/mia-1.svg,Florida Pros Summit - photo 1,1
-mia,photos/mia-2.svg,Florida Pros Summit - photo 2,2
-mia,photos/mia-3.svg,Florida Pros Summit - photo 3,3
-mia,photos/mia-4.svg,Florida Pros Summit - photo 4,4
-mia,photos/mia-5.svg,Florida Pros Summit - photo 5,5
-lax,photos/lax-1.svg,LA Pros Photoshoot Day - photo 1,1
-lax,photos/lax-2.svg,LA Pros Photoshoot Day - photo 2,2
-lax,photos/lax-3.svg,LA Pros Photoshoot Day - photo 3,3
-lax,photos/lax-4.svg,LA Pros Photoshoot Day - photo 4,4
-lax,photos/lax-5.svg,LA Pros Photoshoot Day - photo 5,5
-lax,photos/lax-6.svg,LA Pros Photoshoot Day - photo 6,6
+event_id,photo,caption,order,type,poster
+tt-new-york,photos/tt-new-york-1.svg,Trades Thursday at New York - placeholder photo 1,1,,
+tt-new-york,photos/tt-new-york-2.svg,Trades Thursday at New York - placeholder photo 2,2,,
+tt-new-york,photos/tt-new-york-3.svg,Trades Thursday at New York - placeholder photo 3,3,,
+tt-new-york,photos/tt-new-york-4.svg,Trades Thursday at New York - placeholder photo 4,4,,
+tt-philadelphia,photos/tt-philadelphia-1.svg,Trades Thursday at Philadelphia - placeholder photo 1,1,,
+tt-philadelphia,photos/tt-philadelphia-2.svg,Trades Thursday at Philadelphia - placeholder photo 2,2,,
+tt-philadelphia,photos/tt-philadelphia-3.svg,Trades Thursday at Philadelphia - placeholder photo 3,3,,
+tt-philadelphia,photos/tt-philadelphia-4.svg,Trades Thursday at Philadelphia - placeholder photo 4,4,,
+tt-atlanta,photos/tt-atlanta-1.svg,Trades Thursday at Atlanta - placeholder photo 1,1,,
+tt-atlanta,photos/tt-atlanta-2.svg,Trades Thursday at Atlanta - placeholder photo 2,2,,
+tt-atlanta,photos/tt-atlanta-3.svg,Trades Thursday at Atlanta - placeholder photo 3,3,,
+tt-atlanta,photos/tt-atlanta-4.svg,Trades Thursday at Atlanta - placeholder photo 4,4,,
+tt-miami,photos/tt-miami-1.svg,Trades Thursday at Miami - placeholder photo 1,1,,
+tt-miami,photos/tt-miami-2.svg,Trades Thursday at Miami - placeholder photo 2,2,,
+tt-miami,photos/tt-miami-3.svg,Trades Thursday at Miami - placeholder photo 3,3,,
+tt-miami,photos/tt-miami-4.svg,Trades Thursday at Miami - placeholder photo 4,4,,
+tt-orlando,photos/tt-orlando-1.svg,Trades Thursday at Orlando - placeholder photo 1,1,,
+tt-orlando,photos/tt-orlando-2.svg,Trades Thursday at Orlando - placeholder photo 2,2,,
+tt-orlando,photos/tt-orlando-3.svg,Trades Thursday at Orlando - placeholder photo 3,3,,
+tt-orlando,photos/tt-orlando-4.svg,Trades Thursday at Orlando - placeholder photo 4,4,,
+tt-charlotte,photos/tt-charlotte-1.svg,Trades Thursday at Charlotte - placeholder photo 1,1,,
+tt-charlotte,photos/tt-charlotte-2.svg,Trades Thursday at Charlotte - placeholder photo 2,2,,
+tt-charlotte,photos/tt-charlotte-3.svg,Trades Thursday at Charlotte - placeholder photo 3,3,,
+tt-charlotte,photos/tt-charlotte-4.svg,Trades Thursday at Charlotte - placeholder photo 4,4,,
+tt-tampa,photos/tt-tampa-1.svg,Trades Thursday at Tampa - placeholder photo 1,1,,
+tt-tampa,photos/tt-tampa-2.svg,Trades Thursday at Tampa - placeholder photo 2,2,,
+tt-tampa,photos/tt-tampa-3.svg,Trades Thursday at Tampa - placeholder photo 3,3,,
+tt-tampa,photos/tt-tampa-4.svg,Trades Thursday at Tampa - placeholder photo 4,4,,
+tt-chicago,photos/tt-chicago-1.svg,Trades Thursday at Chicago - placeholder photo 1,1,,
+tt-chicago,photos/tt-chicago-2.svg,Trades Thursday at Chicago - placeholder photo 2,2,,
+tt-chicago,photos/tt-chicago-3.svg,Trades Thursday at Chicago - placeholder photo 3,3,,
+tt-chicago,photos/tt-chicago-4.svg,Trades Thursday at Chicago - placeholder photo 4,4,,
+tt-dallas,photos/tt-dallas-1.svg,Trades Thursday at Dallas - placeholder photo 1,1,,
+tt-dallas,photos/tt-dallas-2.svg,Trades Thursday at Dallas - placeholder photo 2,2,,
+tt-dallas,photos/tt-dallas-3.svg,Trades Thursday at Dallas - placeholder photo 3,3,,
+tt-dallas,photos/tt-dallas-4.svg,Trades Thursday at Dallas - placeholder photo 4,4,,
+tt-houston,photos/tt-houston-1.svg,Trades Thursday at Houston - placeholder photo 1,1,,
+tt-houston,photos/tt-houston-2.svg,Trades Thursday at Houston - placeholder photo 2,2,,
+tt-houston,photos/tt-houston-3.svg,Trades Thursday at Houston - placeholder photo 3,3,,
+tt-houston,photos/tt-houston-4.svg,Trades Thursday at Houston - placeholder photo 4,4,,
+tt-phoenix,photos/tt-phoenix-1.svg,Trades Thursday at Phoenix - placeholder photo 1,1,,
+tt-phoenix,photos/tt-phoenix-2.svg,Trades Thursday at Phoenix - placeholder photo 2,2,,
+tt-phoenix,photos/tt-phoenix-3.svg,Trades Thursday at Phoenix - placeholder photo 3,3,,
+tt-phoenix,photos/tt-phoenix-4.svg,Trades Thursday at Phoenix - placeholder photo 4,4,,
+tt-austin,photos/tt-austin-1.svg,Trades Thursday at Austin - placeholder photo 1,1,,
+tt-austin,photos/tt-austin-2.svg,Trades Thursday at Austin - placeholder photo 2,2,,
+tt-austin,photos/tt-austin-3.svg,Trades Thursday at Austin - placeholder photo 3,3,,
+tt-austin,photos/tt-austin-4.svg,Trades Thursday at Austin - placeholder photo 4,4,,
+tt-las-vegas,photos/tt-las-vegas-1.svg,Trades Thursday at Las Vegas - placeholder photo 1,1,,
+tt-las-vegas,photos/tt-las-vegas-2.svg,Trades Thursday at Las Vegas - placeholder photo 2,2,,
+tt-las-vegas,photos/tt-las-vegas-3.svg,Trades Thursday at Las Vegas - placeholder photo 3,3,,
+tt-las-vegas,photos/tt-las-vegas-4.svg,Trades Thursday at Las Vegas - placeholder photo 4,4,,
+tt-san-diego,photos/tt-san-diego-1.svg,Trades Thursday at San Diego - placeholder photo 1,1,,
+tt-san-diego,photos/tt-san-diego-2.svg,Trades Thursday at San Diego - placeholder photo 2,2,,
+tt-san-diego,photos/tt-san-diego-3.svg,Trades Thursday at San Diego - placeholder photo 3,3,,
+tt-san-diego,photos/tt-san-diego-4.svg,Trades Thursday at San Diego - placeholder photo 4,4,,
+tt-seattle,photos/tt-seattle-1.svg,Trades Thursday at Seattle - placeholder photo 1,1,,
+tt-seattle,photos/tt-seattle-2.svg,Trades Thursday at Seattle - placeholder photo 2,2,,
+tt-seattle,photos/tt-seattle-3.svg,Trades Thursday at Seattle - placeholder photo 3,3,,
+tt-seattle,photos/tt-seattle-4.svg,Trades Thursday at Seattle - placeholder photo 4,4,,
+tt-denver,photos/tt-denver-1.svg,Trades Thursday at Denver - placeholder photo 1,1,,
+tt-denver,photos/tt-denver-2.svg,Trades Thursday at Denver - placeholder photo 2,2,,
+tt-denver,photos/tt-denver-3.svg,Trades Thursday at Denver - placeholder photo 3,3,,
+tt-denver,photos/tt-denver-4.svg,Trades Thursday at Denver - placeholder photo 4,4,,
+tt-sausalito,photos/tt-sausalito-1.svg,Trades Thursday at Sausalito - placeholder photo 1,1,,
+tt-sausalito,photos/tt-sausalito-2.svg,Trades Thursday at Sausalito - placeholder photo 2,2,,
+tt-sausalito,photos/tt-sausalito-3.svg,Trades Thursday at Sausalito - placeholder photo 3,3,,
+tt-sausalito,photos/tt-sausalito-4.svg,Trades Thursday at Sausalito - placeholder photo 4,4,,
+tt-new-york,photos/tt-new-york-video.mp4,Placeholder video (replace with your own),5,video,photos/tt-new-york-1.svg

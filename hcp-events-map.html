@@ -50,14 +50,19 @@
 .hcp-modal .x:focus-visible,.hcp-modal button:focus-visible{outline:3px solid #FF9B24;outline-offset:2px}
 .hcp-modal .desc{padding:0 24px 14px;font-size:15px;line-height:1.5}
 .hcp-modal .viewer{position:relative;background:#000;aspect-ratio:3/2}
+.hcp-modal .viewer .media{position:absolute;inset:0}
 .hcp-modal .viewer img{width:100%;height:100%;object-fit:cover;display:block}
+.hcp-modal .viewer video{width:100%;height:100%;object-fit:contain;display:block;background:#000}
+.hcp-modal .viewer iframe{width:100%;height:100%;border:0;display:block;background:#000}
 .hcp-modal .nav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:0;background:rgba(19,24,26,.75);color:#F0F4F7;font-size:22px;cursor:pointer}
 .hcp-modal .nav.prev{left:12px}.hcp-modal .nav.next{right:12px}
-.hcp-modal .count{position:absolute;right:12px;bottom:10px;background:rgba(19,24,26,.75);color:#F0F4F7;border-radius:99px;padding:3px 10px;font-size:12px;font-weight:700}
+.hcp-modal .count{position:absolute;right:12px;top:10px;pointer-events:none;background:rgba(19,24,26,.75);color:#F0F4F7;border-radius:99px;padding:3px 10px;font-size:12px;font-weight:700}
 .hcp-modal .thumbs{display:flex;gap:8px;padding:14px 24px 22px;overflow-x:auto}
 .hcp-modal .thumbs button{flex:0 0 auto;width:84px;height:56px;padding:0;border:2px solid transparent;border-radius:8px;overflow:hidden;cursor:pointer;background:none;opacity:.65}
 .hcp-modal .thumbs button.on{border-color:#FF9B24;opacity:1}
 .hcp-modal .thumbs img{width:100%;height:100%;object-fit:cover;display:block}
+.hcp-modal .thumbs button{position:relative;background:#0B2B4A}
+.hcp-modal .thumbs .vb{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#F0F4F7;font-size:20px;text-shadow:0 1px 6px rgba(0,0,0,.8);background:rgba(19,24,26,.25)}
 @media (prefers-reduced-motion:reduce){.hcp-map .pin .halo,.hcp-map .pin.drop,.hcp-modal .card{animation:none}}
 </style>
 
@@ -80,7 +85,7 @@
   <div class="card">
     <header><div><h3 id="hcpTitle"></h3><div class="meta"></div></div><button class="x" aria-label="Close gallery">&times;</button></header>
     <div class="desc"></div>
-    <div class="viewer"><img alt=""><button class="nav prev" aria-label="Previous photo">&#8249;</button><button class="nav next" aria-label="Next photo">&#8250;</button><div class="count"></div></div>
+    <div class="viewer"><div class="media"></div><button class="nav prev" aria-label="Previous photo">&#8249;</button><button class="nav next" aria-label="Next photo">&#8250;</button><div class="count"></div></div>
     <div class="thumbs"></div>
   </div>
 </div>
@@ -127,11 +132,17 @@
  function geocode(q){var ck='hcpgeo:'+q;try{var c=localStorage.getItem(ck);if(c)return Promise.resolve(JSON.parse(c))}catch(e){}
   return fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=us&q='+encodeURIComponent(q)).then(function(r){return r.json()}).then(function(j){
    if(!j.length)return null;var v=[parseFloat(j[0].lon),parseFloat(j[0].lat)];try{localStorage.setItem(ck,JSON.stringify(v))}catch(e){}return v}).catch(function(){return null})}
+ function mediaInfo(u,t){u=String(u||'').trim();t=String(t||'').trim().toLowerCase();var m;
+  if(m=u.match(/(?:youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/i))return {kind:'embed',embed:'https://www.youtube-nocookie.com/embed/'+m[1]+'?rel=0',poster:'https://i.ytimg.com/vi/'+m[1]+'/mqdefault.jpg'};
+  if(m=u.match(/vimeo\.com\/(?:video\/)?(\d+)/i))return {kind:'embed',embed:'https://player.vimeo.com/video/'+m[1],poster:''};
+  if(t==='video'||(t!=='image'&&/\.(mp4|webm|mov|m4v|ogv)(\?|#|$)/i.test(u)))return {kind:'video'};
+  return {kind:'image'}}
  function safeUrl(u){u=String(u||'').trim();if(!u)return '';if(!/^[a-z][a-z0-9+.-]*:/i.test(u))u='https://'+u;return /^https?:\/\//i.test(u)?u:''}
  function normDate(d){d=String(d||'').trim();var m=d.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);return m?m[3]+'-'+('0'+m[1]).slice(-2)+'-'+('0'+m[2]).slice(-2):d}
  function build(data){
   var by={};data.photos.forEach(function(p,i){var id=String(p.event_id||'').trim(),u=p.photo||p.photo_url||p.url||p.image;if(!id||!u)return;
-   (by[id]=by[id]||[]).push({src:abs(D.photoBase?new URL(D.photoBase,location.href).href+'/':data.base,u),caption:p.caption||'',o:parseFloat(p.order),i:i})});
+   var pb=D.photoBase?new URL(D.photoBase,location.href).href+'/':data.base,m=mediaInfo(u,p.media_type||p.type);
+   (by[id]=by[id]||[]).push({src:m.embed||abs(pb,u),kind:m.kind,poster:abs(pb,p.poster||p.thumbnail||'')||m.poster||'',caption:p.caption||'',o:parseFloat(p.order),i:i})});
   Object.keys(by).forEach(function(k){by[k].sort(function(a,b){return (isNaN(a.o)?1e9:a.o)-(isNaN(b.o)?1e9:b.o)||a.i-b.i})});
   return data.events.filter(function(e){return e.name&&!/^(no|n|false|0|hidden)$/i.test(String(e.active||'yes'))}).map(function(e){
    return {type:(function(v){v=String(v||'').trim().toLowerCase();return /^(upcoming|register|registration)$/.test(v)?'upcoming':/^(info|hover|hover[- _]?only|grey|gray)$/.test(v)?'info':'gallery'})(e.type),id:String(e.id||e.name),name:e.name,city:e.city||'',date:normDate(e.date),address:e.address||'',lat:parseFloat(e.lat||e.latitude),lng:parseFloat(e.lng||e.longitude),regUrl:safeUrl(e.registration_url||e.registration_link||e.register_url||e.link||e.url),description:e.description||'',photos:by[String(e.id||e.name)]||[]}})
@@ -140,7 +151,7 @@
   var p=window.HCPProject([ev.lng,ev.lat]); if(!p)return;
   var g=document.createElementNS(svgNS,'g');var info=ev.type==='info',up=ev.type==='upcoming';g.setAttribute('class','pin drop'+(info?' info':'')+(up?' up':''));g.setAttribute('tabindex','0');
   if(info){g.setAttribute('role','img');g.setAttribute('aria-label',ev.name+', '+ev.city+(ev.date?', '+fmt(ev.date):''))}
-  else{g.setAttribute('role','button');g.setAttribute('aria-label',up?ev.name+', '+ev.city+(ev.date?', '+fmt(ev.date):'')+'. Upcoming event, view details':ev.name+', '+ev.city+'. Open photo gallery')}g.style.animationDelay=(i*70)+'ms';
+  else{g.setAttribute('role','button');g.setAttribute('aria-label',up?ev.name+', '+ev.city+(ev.date?', '+fmt(ev.date):'')+'. Upcoming event, view details':ev.name+', '+ev.city+'. Open photo gallery')}g.style.animationDelay=Math.min(i*20,900)+'ms';
   g.innerHTML=info?'<circle class="dot" cx="'+p[0]+'" cy="'+p[1]+'" r="6"/><circle cx="'+p[0]+'" cy="'+p[1]+'" r="14" fill="transparent"/>':'<circle class="halo" cx="'+p[0]+'" cy="'+p[1]+'" r="9"/><circle class="dot" cx="'+p[0]+'" cy="'+p[1]+'" r="8"/><circle cx="'+p[0]+'" cy="'+p[1]+'" r="22" fill="transparent"/>';
   function showTip(){var r=svg.getBoundingClientRect(),s=stage.getBoundingClientRect();
    tip.innerHTML='';var b=document.createElement('span');b.textContent=ev.name;var sm=document.createElement('small');sm.textContent=ev.city+(ev.date?' \u00b7 '+fmt(ev.date):'');tip.appendChild(b);tip.appendChild(sm);
@@ -152,13 +163,23 @@
    pins.appendChild(g);if(up){legendK.textContent=++shownUp;legendUI.style.display='inline'}else legendN.textContent=++shown}
   else{pins.insertBefore(g,pins.firstChild);legendM.textContent=++shownInfo;legendGI.style.display='inline'}
  }
- var img=modal.querySelector('.viewer img'),thumbs=modal.querySelector('.thumbs'),count=modal.querySelector('.count'),viewer=modal.querySelector('.viewer');
- function show(i){var n=cur.photos.length;if(!n){img.removeAttribute('src');count.textContent='';return}idx=(i+n)%n;var ph=cur.photos[idx];img.src=ph.src;img.alt=ph.caption||cur.name;count.textContent=(idx+1)+' / '+n;
-  [].forEach.call(thumbs.children,function(b,k){b.classList.toggle('on',k===idx)})}
+ var media=modal.querySelector('.viewer .media'),thumbs=modal.querySelector('.thumbs'),count=modal.querySelector('.count'),viewer=modal.querySelector('.viewer');
+ function stopMedia(){media.innerHTML=''}
+ function show(i){var n=cur.photos.length;stopMedia();if(!n){count.textContent='';return}
+  idx=(i+n)%n;var ph=cur.photos[idx],el,lbl=ph.caption||cur.name;
+  if(ph.kind==='video'){el=document.createElement('video');el.controls=true;el.playsInline=true;el.preload='metadata';if(ph.poster)el.poster=ph.poster;el.setAttribute('aria-label',lbl);el.src=ph.src}
+  else if(ph.kind==='embed'){el=document.createElement('iframe');el.loading='lazy';el.title=lbl;el.allow='accelerometer; autoplay; encrypted-media; picture-in-picture; fullscreen';el.allowFullscreen=true;el.referrerPolicy='strict-origin-when-cross-origin';el.src=ph.src}
+  else{el=document.createElement('img');el.alt=lbl;el.decoding='async';el.src=ph.src}
+  media.appendChild(el);count.textContent=(idx+1)+' / '+n;
+  [].forEach.call(thumbs.children,function(b,k){b.classList.toggle('on',k===idx);if(k===idx&&b.scrollIntoView)b.scrollIntoView({block:'nearest',inline:'nearest'})});
+  setTimeout(function(){[idx+1,idx-1].forEach(function(k){var q=cur&&cur.photos[(k+n)%n];if(q&&q.kind==='image'){var pi=new Image();pi.src=q.src}})},350)}
  function open(ev,el){if(ev.type==='upcoming')return openUp(ev,el);cur=ev;lastFocus=el;modal.querySelector('h3').textContent=ev.name;
   var m=modal.querySelector('.meta');m.innerHTML='';var s=document.createElement('span');s.textContent=ev.city;m.appendChild(s);m.appendChild(document.createTextNode(ev.date?' \u00b7 '+fmt(ev.date):''));
   modal.querySelector('.desc').textContent=ev.description||'';
-  thumbs.innerHTML='';ev.photos.forEach(function(p,k){var b=document.createElement('button');b.setAttribute('aria-label','Photo '+(k+1));var im=document.createElement('img');im.alt='';im.src=p.src;b.appendChild(im);b.onclick=function(){show(k)};thumbs.appendChild(b)});
+  thumbs.innerHTML='';ev.photos.forEach(function(p,k){var b=document.createElement('button'),vid=p.kind!=='image',tsrc=p.kind==='image'?p.src:p.poster;b.setAttribute('aria-label',(vid?'Video ':'Photo ')+(k+1));
+   if(tsrc){var im=document.createElement('img');im.alt='';im.loading='lazy';im.decoding='async';im.src=tsrc;b.appendChild(im)}
+   if(vid){var v=document.createElement('span');v.className='vb';v.textContent='\u25B6';b.appendChild(v)}
+   b.onclick=function(){show(k)};thumbs.appendChild(b)});
   viewer.style.display=ev.photos.length?'':'none';
   modal.classList.add('open');document.body.style.overflow='hidden';show(0);modal.querySelector('.x').focus();}
  var up=document.getElementById('hcpUpModal'),upLast=null;
@@ -168,7 +189,7 @@
  function closeUp(){up.classList.remove('open');document.body.style.overflow='';if(upLast)upLast.focus()}
  up.querySelector('.x').onclick=closeUp;up.addEventListener('click',function(e){if(e.target===up)closeUp()});
  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&up.classList.contains('open'))closeUp()});
- function close(){modal.classList.remove('open');document.body.style.overflow='';if(lastFocus)lastFocus.focus()}
+ function close(){stopMedia();modal.classList.remove('open');document.body.style.overflow='';if(lastFocus)lastFocus.focus()}
  modal.querySelector('.x').onclick=close;modal.addEventListener('click',function(e){if(e.target===modal)close()});
  modal.querySelector('.prev').onclick=function(){show(idx-1)};modal.querySelector('.next').onclick=function(){show(idx+1)};
  document.addEventListener('keydown',function(e){if(!modal.classList.contains('open'))return;
