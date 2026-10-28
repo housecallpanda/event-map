@@ -8,7 +8,7 @@
 .hcp-map *{box-sizing:border-box}
 .hcp-map h2{margin:0 0 8px;color:var(--satin);font-weight:800;font-size:clamp(28px,4vw,44px);line-height:1.05;text-transform:uppercase;letter-spacing:.01em;text-align:center}
 .hcp-map h2 em{font-style:normal;color:var(--gold)}
-.hcp-map .sub{text-align:center;margin:0 auto 24px;max-width:560px;font-size:16px}
+.hcp-map .sub{text-wrap:balance;text-align:center;margin:0 auto 24px;max-width:560px;font-size:16px}
 .hcp-map .stage{position:relative;max-width:1000px;margin:0 auto}
 .hcp-map svg.map{width:100%;height:auto;display:block;overflow:visible}
 .hcp-map .states path{fill:#0B4E8C;stroke:var(--denim);stroke-width:1.2;transition:fill .2s}
@@ -108,6 +108,8 @@
  var D=root.dataset,SHEETJS='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
  var pins=root.querySelector('.pins'),tip=root.querySelector('.tip'),stage=root.querySelector('.stage'),svg=root.querySelector('svg.map'),sub=root.querySelector('.sub'),legendN=root.querySelector('.n');
  var modal=document.getElementById('hcpModal'),cur=null,idx=0,lastFocus=null,shown=0,shownInfo=0,shownUp=0,legendK=root.querySelector('.k'),legendUI=root.querySelector('.ui'),legendM=root.querySelector('.m'),legendGI=root.querySelector('.gi');
+ function nw(s){return String(s||'').replace(/\s+(\S+)\s*$/,'\u00a0$1')}
+ sub.textContent=nw(sub.textContent);
  function fmt(d){try{return new Date(d+'T12:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}catch(e){return d}}
  function abs(base,u){u=String(u||'').trim();if(!u)return '';if(/^(https?:|data:|blob:|\/)/i.test(u))return u;try{return new URL(u,new URL(base,location.href)).href}catch(e){return u}}
  function loadScript(src){return new Promise(function(ok,no){if(window.XLSX)return ok();var s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=no;document.head.appendChild(s)})}
@@ -207,7 +209,7 @@
   setTimeout(function(){[idx+1,idx-1].forEach(function(k){var q=cur&&cur.photos[(k+n)%n];if(q&&q.kind==='image'){var pi=new Image();pi.src=q.src}})},350)}
  function open(ev,el){if(ev.type==='upcoming')return openUp(ev,el);cur=ev;lastFocus=el;modal.querySelector('h3').textContent=ev.name;
   var m=modal.querySelector('.meta');m.innerHTML='';var s=document.createElement('span');s.textContent=ev.city;m.appendChild(s);m.appendChild(document.createTextNode(ev.date?' \u00b7 '+fmt(ev.date):''));
-  modal.querySelector('.desc').textContent=ev.description||'';
+  modal.querySelector('.desc').textContent=nw(ev.description);
   thumbs.innerHTML='';ev.photos.forEach(function(p,k){var b=document.createElement('button'),vid=p.kind!=='image',tsrc=p.kind==='image'?p.src:p.poster;b.setAttribute('aria-label',(vid?'Video ':'Photo ')+(k+1));
    if(tsrc){var im=document.createElement('img');im.alt='';im.loading='lazy';im.decoding='async';im.src=tsrc;b.appendChild(im)}
    if(vid){var v=document.createElement('span');v.className='vb';v.textContent='\u25B6';b.appendChild(v)}
@@ -216,7 +218,7 @@
   modal.classList.add('open');document.body.style.overflow='hidden';show(0);modal.querySelector('.x').focus();}
  var up=document.getElementById('hcpUpModal'),upLast=null;
  function openUp(ev,el){upLast=el;up.querySelector('h3').textContent=ev.name;var m=up.querySelectorAll('.meta')[1];m.innerHTML='';var s=document.createElement('span');s.textContent=ev.city;m.appendChild(s);m.appendChild(document.createTextNode(ev.date?' \u00b7 '+fmt(ev.date):''));
-  up.querySelector('.desc').textContent=ev.description||'';var a=up.querySelector('.reg');if(ev.regUrl){a.href=ev.regUrl;a.style.display='inline-block'}else{a.removeAttribute('href');a.style.display='none'}
+  up.querySelector('.desc').textContent=nw(ev.description);var a=up.querySelector('.reg');if(ev.regUrl){a.href=ev.regUrl;a.style.display='inline-block'}else{a.removeAttribute('href');a.style.display='none'}
   up.classList.add('open');document.body.style.overflow='hidden';(ev.regUrl?a:up.querySelector('.x')).focus()}
  function closeUp(){up.classList.remove('open');document.body.style.overflow='';if(upLast)upLast.focus()}
  up.querySelector('.x').onclick=closeUp;up.addEventListener('click',function(e){if(e.target===up)closeUp()});
